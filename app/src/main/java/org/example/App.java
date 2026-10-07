@@ -1,38 +1,53 @@
 package org.example;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import javax.swing.*;
+import org.example.controller.PlayerController;
+import org.example.shared.Playlist;
+import org.example.shared.Track;
 
 public class App {
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("JFrame");
+    static JFrame frame;
+
+    public App() {
+        try {
+            File fontFile = new File(
+                this.getClass()
+                    .getClassLoader()
+                    .getResource("FiraCodeNerdFontPropo-Regular.ttf")
+                    .toURI()
+            );
+
+            Font firaCode = Font.createFont(Font.TRUETYPE_FONT, fontFile);
+
+            UIManager.getDefaults().put("defaultFont", firaCode);
+        } catch (IOException | FontFormatException | URISyntaxException e) {
+            e.printStackTrace();
+        }
+
+        this.frame = new JFrame("JFrame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
+    }
 
-        JPanel bottomBar = new JPanel();
-        bottomBar.setBackground(Color.red);
-        bottomBar.setLayout(new BoxLayout(bottomBar, BoxLayout.X_AXIS));
-        bottomBar.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
-        bottomBar.setPreferredSize(new Dimension(0, 55));
-        frame.add(bottomBar, BorderLayout.SOUTH);
-
-        JButton playPauseButton = new JButton();
-        playPauseButton.setText("play");
-        bottomBar.add(playPauseButton);
-
+    public void displayFrame() {
         frame.pack();
+        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setSize(1294, 700);
         frame.setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        App app = new App();
+
+        PlayerController playerController = new PlayerController();
+
+        frame.add(playerController.getView(), BorderLayout.SOUTH);
+
+        app.displayFrame();
     }
 }
