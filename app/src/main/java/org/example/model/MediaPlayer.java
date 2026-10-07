@@ -16,6 +16,7 @@ public class MediaPlayer {
         this.playlist = new Playlist();
         this.currentTrack = this.playlist.firstTrack();
         this.isPlaying = false;
+        this.isLooping = false;
         // this.msPositon = 0;
     }
 

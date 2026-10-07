@@ -1,6 +1,7 @@
 package org.example.view;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 import javax.swing.*;
@@ -52,7 +53,8 @@ public class PlayerView extends JPanel {
         this.add(this.previousButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        this.playPauseButton = stylizedButton("󰐎");
+        // this.playPauseButton = stylizedButton("󰐎");
+        this.playPauseButton = stylizedButton("󰐊");
         this.add(this.playPauseButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
 
@@ -60,7 +62,7 @@ public class PlayerView extends JPanel {
         this.add(this.nextButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        this.loopButton = stylizedButton("󰑗");
+        this.loopButton = stylizedButton("󰑖");
         this.add(this.loopButton);
 
         this.add(Box.createRigidArea(new Dimension(25, 0)));
@@ -77,5 +79,23 @@ public class PlayerView extends JPanel {
 
         this.appendPlaylistButton = stylizedButton("󰑁");
         this.add(this.appendPlaylistButton);
+    }
+
+    public void changePlayPauseButtonText(String text) {
+        this.playPauseButton.setText(text);
+    }
+
+    public void addPlayPauseButtonListener(
+        ActionListener playPauseButtonListener
+    ) {
+        this.playPauseButton.addActionListener(playPauseButtonListener);
+    }
+
+    public void changeLoopButtonText(String text) {
+        this.loopButton.setText(text);
+    }
+
+    public void addLoopButtonListener(ActionListener loopButtonListener) {
+        this.loopButton.addActionListener(loopButtonListener);
     }
 }
