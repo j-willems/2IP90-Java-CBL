@@ -21,20 +21,11 @@ public class PlayerView extends JPanel {
 
     JButton stylizedButton(String buttonText) {
         JButton button = new JButton(buttonText);
-
         Dimension size = new Dimension(44, 44);
 
         button.setMaximumSize(size);
         button.setPreferredSize(size);
-        button.setBackground(Color.white);
         button.setFocusPainted(false);
-        button.setBorder(
-            BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(2, 2, 2, 2, Color.black),
-                new EmptyBorder(new Insets(10, 10, 10, 10))
-            )
-        );
-        button.setFont(new Font("FiraCode Nerd Font Propo", Font.BOLD, 22));
 
         return button;
     }
@@ -43,7 +34,7 @@ public class PlayerView extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBorder(
             BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(2, 0, 0, 0, Color.black),
+                BorderFactory.createMatteBorder(2, 0, 0, 0, Color.LIGHT_GRAY),
                 new EmptyBorder(new Insets(0, 15, 0, 15))
             )
         );
