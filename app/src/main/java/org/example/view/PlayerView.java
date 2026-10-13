@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -14,6 +15,7 @@ public class PlayerView extends JPanel {
     JButton nextButton;
     JButton loopButton;
 
+    Duration totalPlayTime;
     JProgressBar progressBar;
 
     JButton prependPlaylistButton;
@@ -27,6 +29,8 @@ public class PlayerView extends JPanel {
         button.setPreferredSize(size);
         button.setFocusPainted(false);
 
+        button.setFont(UIManager.getFont("defaultFont").deriveFont(21.5f));
+
         return button;
     }
 
@@ -34,7 +38,7 @@ public class PlayerView extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBorder(
             BorderFactory.createCompoundBorder(
-                BorderFactory.createMatteBorder(2, 0, 0, 0, Color.LIGHT_GRAY),
+                BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY),
                 new EmptyBorder(new Insets(0, 15, 0, 15))
             )
         );
@@ -44,7 +48,6 @@ public class PlayerView extends JPanel {
         this.add(this.previousButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
 
-        // this.playPauseButton = stylizedButton("󰐎");
         this.playPauseButton = stylizedButton("󰐊");
         this.add(this.playPauseButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
@@ -59,7 +62,8 @@ public class PlayerView extends JPanel {
         this.add(Box.createRigidArea(new Dimension(25, 0)));
 
         this.progressBar = new JProgressBar();
-        this.progressBar.setValue(35);
+        this.progressBar.setString("00:00/00:00");
+        this.progressBar.setStringPainted(true);
         this.add(this.progressBar);
 
         this.add(Box.createHorizontalGlue());
@@ -70,6 +74,38 @@ public class PlayerView extends JPanel {
 
         this.appendPlaylistButton = stylizedButton("󰑁");
         this.add(this.appendPlaylistButton);
+    }
+
+    public void setTotalPlayTime(Duration totalPlayTime) {
+        this.progressBar.setMaximum((int) totalPlayTime.toMillis());
+        this.totalPlayTime = totalPlayTime;
+
+        int totalMinutes = totalPlayTime.toMinutesPart();
+        int totalSeconds = totalPlayTime.toSecondsPart();
+
+        this.progressBar.setString(
+            String.format("00:00/%02d:%02d", totalMinutes, totalSeconds)
+        );
+    }
+
+    public void updatePlayedTime(Duration playedTime) {
+        this.progressBar.setValue((int) playedTime.toMillis());
+
+        int minutesPlayed = playedTime.toMinutesPart();
+        int secondsPlayed = playedTime.toSecondsPart();
+
+        int totalMinutes = this.totalPlayTime.toMinutesPart();
+        int totalSeconds = this.totalPlayTime.toSecondsPart();
+
+        this.progressBar.setString(
+            String.format(
+                "%02d:%02d/%02d:%02d",
+                minutesPlayed,
+                secondsPlayed,
+                totalMinutes,
+                totalSeconds
+            )
+        );
     }
 
     public void changePlayPauseButtonText(String text) {

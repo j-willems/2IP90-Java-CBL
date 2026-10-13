@@ -27,8 +27,8 @@ public class App {
             Font firaCode = Font.createFont(
                 Font.TRUETYPE_FONT,
                 fontFile
-            ).deriveFont(22f);
-            UIManager.getDefaults().put("defaultFont", firaCode);
+            ).deriveFont(13.5f);
+            UIManager.put("defaultFont", firaCode);
 
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (
@@ -62,6 +62,9 @@ public class App {
         PlayerController playerController = new PlayerController();
 
         JTabbedPane mainTabs = new JTabbedPane();
+        mainTabs.setFont(
+            UIManager.getFont("defaultFont").deriveFont(Font.BOLD)
+        );
         mainTabs.addTab("Library", libraryController.getView());
         // maintabs.addTab("Playlist", PlayListController.getView());
 
@@ -69,9 +72,5 @@ public class App {
         frame.add(playerController.getView(), BorderLayout.SOUTH);
 
         app.displayFrame();
-
-        // Library lib = new Library();
-        // lib.setPath("/home/jawi/Pictures");
-        // lib.populateLibrary();
     }
 }
