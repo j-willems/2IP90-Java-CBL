@@ -35,8 +35,7 @@ public class Library extends AbstractListModel<Track> {
 
         for (File file : files) {
             if (file.isFile()) {
-                int index = this.playlist.appendTrack(new Track(file));
-                fireIntervalAdded(this, index, index);
+                this.playlist.appendTrack(new Track(file));
             } else if (file.isDirectory()) {
                 recurseLibrary(file.listFiles());
             }
@@ -46,20 +45,14 @@ public class Library extends AbstractListModel<Track> {
     public void populateLibrary() {
         File[] files = this.libraryDir.listFiles();
         recurseLibrary(files);
-
-        this.playlist.traverse();
+        fireIntervalAdded(this, 0, this.playlist.getSize());
     }
 
     public Track getElementAt(int index) {
-        System.out.println("requested element at idx: " + index);
         return this.playlist.getTrackAtIndex(index);
     }
 
     public int getSize() {
-        System.out.println(
-            "requested playlist size: " + this.playlist.getSize()
-        );
-
         return this.playlist.getSize();
     }
 }

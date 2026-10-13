@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.*;
@@ -18,7 +19,6 @@ public class LibraryView extends JPanel {
 
     JPanel headerBar;
 
-    JPanel tracksPane;
     JList tracksList;
     JScrollPane scrollPane;
 
@@ -35,6 +35,18 @@ public class LibraryView extends JPanel {
         return button;
     }
 
+    String resizeString(String input, int finalSize) {
+        if (input == null) {
+            return String.format("%-" + finalSize + "s", "");
+        }
+
+        if (input.length() > finalSize) {
+            return input.substring(0, finalSize - 3) + "...";
+        }
+
+        return String.format("%-" + finalSize + "s", input);
+    }
+
     public LibraryView() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
@@ -48,17 +60,10 @@ public class LibraryView extends JPanel {
         );
 
         this.headerBar = new JPanel();
-        this.folderBar.setLayout(
-            new BoxLayout(this.folderBar, BoxLayout.X_AXIS)
+        this.headerBar.setLayout(
+            new BoxLayout(this.headerBar, BoxLayout.X_AXIS)
         );
-
-        this.tracksPane = new JPanel();
-        this.tracksPane.setLayout(
-            new BoxLayout(this.tracksPane, BoxLayout.Y_AXIS)
-        );
-
-
-
+        this.headerBar.setMaximumSize(new Dimension(9999, 58));
 
         this.pathLabel = new JLabel("Library: no folder loaded");
         this.folderBar.add(this.pathLabel);
@@ -68,10 +73,24 @@ public class LibraryView extends JPanel {
         this.folderChooserButton = stylizedButton("");
         this.folderBar.add(this.folderChooserButton);
 
+        this.headerBar.add(Box.createRigidArea(new Dimension(6, 0)));
 
+        this.headerBar.add(new JLabel(resizeString("#", 4)));
+        this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
 
-        this.headerBar.add(new JLabel("test header"));
+        // this.headerBar.add(new JLabel(resizeString("Cover", 20)));
+        // this.headerBar.add(Box.createRigidArea(new Dimension(20, 0)));
 
+        this.headerBar.add(new JLabel(resizeString("Title", 35)));
+        this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
+
+        this.headerBar.add(new JLabel(resizeString("Artist", 35)));
+        this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
+
+        this.headerBar.add(new JLabel(resizeString("Album", 35)));
+        this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
+
+        this.headerBar.add(new JLabel(resizeString("Duration", 8)));
 
         this.folderChooser = new JFileChooser(
             FileSystemView.getFileSystemView().getHomeDirectory()
@@ -86,11 +105,10 @@ public class LibraryView extends JPanel {
             ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
             ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
         );
-        this.tracksPane.add(this.scrollPane);
 
         this.add(this.folderBar);
         this.add(this.headerBar);
-        this.add(this.tracksPane);
+        this.add(this.scrollPane);
     }
 
     public void setLibraryContent(ListModel<Track> model) {
@@ -114,19 +132,11 @@ public class LibraryView extends JPanel {
 
     class TrackRenderer extends JPanel implements ListCellRenderer<Track> {
 
-        JLabel index;
-        ImageIcon cover;
-        JLabel title;
-        JLabel artist;
-        JLabel album;
-        JLabel duration;
+        JPanel trackCell;
 
-        //         public TrackRenderer() {
-        //             System.out.println("created track rendere");
-        //
-        //             this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        //             this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
-        //         }
+        public TrackRenderer() {
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        }
 
         @Override
         public Component getListCellRendererComponent(
@@ -136,31 +146,44 @@ public class LibraryView extends JPanel {
             boolean isSelected,
             boolean cellHasFocus
         ) {
-            this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-            this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
+            this.trackCell = new JPanel();
+            this.trackCell.setLayout(
+                new BoxLayout(this.trackCell, BoxLayout.X_AXIS)
+            );
 
-            this.index = new JLabel(String.format("%03d", index));
-            this.cover = new ImageIcon();
-            this.title = new JLabel(value.getTitle());
-            this.artist = new JLabel(value.getArtist());
-            this.album = new JLabel(value.getAlbum());
-            this.duration = new JLabel("00:00");
+            this.trackCell.add(Box.createRigidArea(new Dimension(4, 0)));
 
-            add(this.index);
-            this.add(Box.createRigidArea(new Dimension(15, 0)));
+            this.trackCell.add(
+                new JLabel(resizeString(String.format("%03d", index + 1), 4))
+            );
+            this.trackCell.add(Box.createRigidArea(new Dimension(15, 0)));
 
-            add(this.title);
-            this.add(Box.createRigidArea(new Dimension(15, 0)));
+            // this.trackCell.add(new JLabel(new ImageIcon()));
+            // this.trackCell.add(Box.createRigidArea(new Dimension(15, 0)));
 
-            add(this.artist);
-            this.add(Box.createRigidArea(new Dimension(15, 0)));
+            this.trackCell.add(new JLabel(resizeString(value.getTitle(), 35)));
+            this.trackCell.add(Box.createRigidArea(new Dimension(15, 0)));
 
-            add(this.album);
-            this.add(Box.createRigidArea(new Dimension(15, 0)));
+            this.trackCell.add(new JLabel(resizeString(value.getArtist(), 35)));
+            this.trackCell.add(Box.createRigidArea(new Dimension(15, 0)));
 
-            add(this.duration);
+            this.trackCell.add(new JLabel(resizeString(value.getAlbum(), 35)));
+            this.trackCell.add(Box.createRigidArea(new Dimension(15, 0)));
 
-            return this;
+            Duration duration = value.getDuration();
+            int minutes = duration.toMinutesPart();
+            int seconds = duration.toSecondsPart();
+
+            this.trackCell.add(
+                new JLabel(
+                    resizeString(
+                        String.format("%02d:%02d", minutes, seconds),
+                        8
+                    )
+                )
+            );
+
+            return this.trackCell;
         }
     }
 }

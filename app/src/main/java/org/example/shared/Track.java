@@ -16,6 +16,9 @@ public class Track implements Comparator<Track> {
 
     public Track(File file) {
         this.title = file.getName();
+        this.artist = file.getName();
+        this.album = file.getName();
+        this.duration = Duration.ZERO;
     }
 
     public String getTitle() {
@@ -28,6 +31,10 @@ public class Track implements Comparator<Track> {
 
     public String getAlbum() {
         return this.album;
+    }
+
+    public Duration getDuration() {
+        return this.duration;
     }
 
     public String toString() {

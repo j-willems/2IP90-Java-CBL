@@ -35,9 +35,7 @@ public class Playlist {
     public Track getTrackAtIndex(int index) {
         Node temp = this.head;
 
-        System.out.println("requested playlist index " + index);
-
-        for (int i=0; i<index; i++) {
+        for (int i = 0; i < index; i++) {
             temp = temp.next;
         }
 

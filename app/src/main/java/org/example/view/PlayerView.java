@@ -39,10 +39,9 @@ public class PlayerView extends JPanel {
         this.setBorder(
             BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(1, 0, 0, 0, Color.LIGHT_GRAY),
-                new EmptyBorder(new Insets(0, 15, 0, 15))
+                new EmptyBorder(new Insets(6, 15, 6, 15))
             )
         );
-        this.setPreferredSize(new Dimension(0, 55));
 
         this.previousButton = stylizedButton("󰒮");
         this.add(this.previousButton);
