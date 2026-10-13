@@ -55,4 +55,9 @@ public class Library extends AbstractListModel<Track> {
     public int getSize() {
         return this.playlist.getSize();
     }
+
+    public void clear() {
+        fireIntervalRemoved(this, 0, this.playlist.getSize());
+        this.playlist.clear();
+    }
 }

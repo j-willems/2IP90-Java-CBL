@@ -32,6 +32,12 @@ public class Playlist {
         return this.size;
     }
 
+    public void clear() {
+        this.current = null;
+        this.head = null;
+        this.size = 0;
+    }
+
     public Track getTrackAtIndex(int index) {
         Node temp = this.head;
 

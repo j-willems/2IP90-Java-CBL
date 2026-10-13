@@ -30,6 +30,8 @@ public class LibraryController {
         public void actionPerformed(ActionEvent arg0) {
             String folderPath = view.selectFolder();
             model.setPath(folderPath);
+
+            model.clear();
             model.populateLibrary();
 
             view.setPathLabelText(folderPath);
