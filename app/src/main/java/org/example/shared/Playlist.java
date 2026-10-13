@@ -28,17 +28,33 @@ public class Playlist {
         return this.current.track;
     }
 
+    public int getSize() {
+        return this.size;
+    }
+
+    public Track getTrackAtIndex(int index) {
+        Node temp = this.head;
+
+        System.out.println("requested playlist index " + index);
+
+        for (int i=0; i<index; i++) {
+            temp = temp.next;
+        }
+
+        return temp.track;
+    }
+
     public Track previousTrack() {
         this.current = this.current.prev;
 
         return this.current.track;
     }
 
-    public void appendTrack(Track track) {
+    public int appendTrack(Track track) {
         if (this.head == null) {
             this.head = new Node(track);
 
-            return;
+            return 0;
         }
 
         Node temp = new Node(track, this.head.prev, this.head);
@@ -47,6 +63,7 @@ public class Playlist {
         this.head.prev = temp;
 
         this.size++;
+        return this.size - 1;
     }
 
     public void prependTrack(Track track) {

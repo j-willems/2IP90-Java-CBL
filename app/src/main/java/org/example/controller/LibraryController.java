@@ -3,6 +3,7 @@ package org.example.controller;
 import java.awt.event.*;
 import java.io.*;
 import org.example.model.Library;
+import org.example.shared.Playlist;
 import org.example.view.LibraryView;
 
 public class LibraryController {
@@ -13,6 +14,7 @@ public class LibraryController {
     public LibraryController() {
         this.model = new Library();
         this.view = new LibraryView();
+        this.view.setLibraryContent(this.model);
 
         this.view.addFolderChooserButtonListener(
             new FolderChooserButtonListener()

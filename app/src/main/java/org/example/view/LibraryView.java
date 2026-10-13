@@ -7,14 +7,20 @@ import java.net.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.filechooser.*;
+import org.example.shared.Track;
 
 public class LibraryView extends JPanel {
+
     JPanel folderBar;
     JLabel pathLabel;
     JFileChooser folderChooser;
     JButton folderChooserButton;
 
-    JPanel contentPane;
+    JPanel headerBar;
+
+    JPanel tracksPane;
+    JList tracksList;
+    JScrollPane scrollPane;
 
     JButton stylizedButton(String buttonText) {
         JButton button = new JButton(buttonText);
@@ -24,33 +30,75 @@ public class LibraryView extends JPanel {
         button.setPreferredSize(size);
         button.setFocusPainted(false);
 
+        button.setFont(UIManager.getFont("defaultFont").deriveFont(21.5f));
+
         return button;
     }
 
     public LibraryView() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
-        this.setPreferredSize(new Dimension(0, 55));
 
         this.folderBar = new JPanel();
-        this.folderBar.setLayout(new BoxLayout(this.folderBar, BoxLayout.X_AXIS));
-        this.folderBar.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.LIGHT_GRAY));
+        this.folderBar.setLayout(
+            new BoxLayout(this.folderBar, BoxLayout.X_AXIS)
+        );
+        this.folderBar.setBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)
+        );
 
-        this.pathLabel = new JLabel("Open a folder ->");
-        this.folderChooserButton = stylizedButton("");
+        this.headerBar = new JPanel();
+        this.folderBar.setLayout(
+            new BoxLayout(this.folderBar, BoxLayout.X_AXIS)
+        );
 
+        this.tracksPane = new JPanel();
+        this.tracksPane.setLayout(
+            new BoxLayout(this.tracksPane, BoxLayout.Y_AXIS)
+        );
+
+
+
+
+        this.pathLabel = new JLabel("Library: no folder loaded");
         this.folderBar.add(this.pathLabel);
+
         this.folderBar.add(Box.createHorizontalGlue());
+
+        this.folderChooserButton = stylizedButton("");
         this.folderBar.add(this.folderChooserButton);
 
-        this.add(this.folderBar);
 
-        this.folderChooser = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
+
+        this.headerBar.add(new JLabel("test header"));
+
+
+        this.folderChooser = new JFileChooser(
+            FileSystemView.getFileSystemView().getHomeDirectory()
+        );
         this.folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        this.tracksList = new JList<Track>();
+        this.tracksList.setCellRenderer(new TrackRenderer());
+
+        this.scrollPane = new JScrollPane(
+            this.tracksList,
+            ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+            ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER
+        );
+        this.tracksPane.add(this.scrollPane);
+
+        this.add(this.folderBar);
+        this.add(this.headerBar);
+        this.add(this.tracksPane);
+    }
+
+    public void setLibraryContent(ListModel<Track> model) {
+        this.tracksList.setModel(model);
     }
 
     public void setPathLabelText(String labelText) {
-        this.pathLabel.setText(labelText);
+        this.pathLabel.setText("Library: " + labelText);
     }
 
     public String selectFolder() {
@@ -62,5 +110,57 @@ public class LibraryView extends JPanel {
         ActionListener folderChooserButtonListener
     ) {
         this.folderChooserButton.addActionListener(folderChooserButtonListener);
+    }
+
+    class TrackRenderer extends JPanel implements ListCellRenderer<Track> {
+
+        JLabel index;
+        ImageIcon cover;
+        JLabel title;
+        JLabel artist;
+        JLabel album;
+        JLabel duration;
+
+        //         public TrackRenderer() {
+        //             System.out.println("created track rendere");
+        //
+        //             this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        //             this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
+        //         }
+
+        @Override
+        public Component getListCellRendererComponent(
+            JList<? extends Track> list,
+            Track value,
+            int index,
+            boolean isSelected,
+            boolean cellHasFocus
+        ) {
+            this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+            this.setBorder(new EmptyBorder(new Insets(0, 15, 0, 15)));
+
+            this.index = new JLabel(String.format("%03d", index));
+            this.cover = new ImageIcon();
+            this.title = new JLabel(value.getTitle());
+            this.artist = new JLabel(value.getArtist());
+            this.album = new JLabel(value.getAlbum());
+            this.duration = new JLabel("00:00");
+
+            add(this.index);
+            this.add(Box.createRigidArea(new Dimension(15, 0)));
+
+            add(this.title);
+            this.add(Box.createRigidArea(new Dimension(15, 0)));
+
+            add(this.artist);
+            this.add(Box.createRigidArea(new Dimension(15, 0)));
+
+            add(this.album);
+            this.add(Box.createRigidArea(new Dimension(15, 0)));
+
+            add(this.duration);
+
+            return this;
+        }
     }
 }

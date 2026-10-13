@@ -1,16 +1,18 @@
 package org.example.model;
 
 import java.io.*;
+import java.util.*;
+import javax.swing.*;
 import org.example.shared.Playlist;
 import org.example.shared.Track;
 
-public class Library {
+public class Library extends AbstractListModel<Track> {
 
     Playlist playlist;
     File libraryDir;
 
     public Library() {
-        this.playlist = null;
+        this.playlist = new Playlist();
         this.libraryDir = null;
     }
 
@@ -29,11 +31,12 @@ public class Library {
     }
 
     private void recurseLibrary(File[] files) {
-        for (int i = 1; i < files.length; i++) {
-            File file = files[i];
+        Arrays.sort(files);
 
+        for (File file : files) {
             if (file.isFile()) {
-                System.out.println(file);
+                int index = this.playlist.appendTrack(new Track(file));
+                fireIntervalAdded(this, index, index);
             } else if (file.isDirectory()) {
                 recurseLibrary(file.listFiles());
             }
@@ -43,5 +46,20 @@ public class Library {
     public void populateLibrary() {
         File[] files = this.libraryDir.listFiles();
         recurseLibrary(files);
+
+        this.playlist.traverse();
+    }
+
+    public Track getElementAt(int index) {
+        System.out.println("requested element at idx: " + index);
+        return this.playlist.getTrackAtIndex(index);
+    }
+
+    public int getSize() {
+        System.out.println(
+            "requested playlist size: " + this.playlist.getSize()
+        );
+
+        return this.playlist.getSize();
     }
 }

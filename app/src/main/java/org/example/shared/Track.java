@@ -1,5 +1,6 @@
 package org.example.shared;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.Comparator;
 import javax.swing.ImageIcon;
@@ -13,15 +14,9 @@ public class Track implements Comparator<Track> {
     Duration duration;
     ImageIcon cover;
 
-    public Track(String title) {
-        this.title = title;
-    }
-
-    /*
     public Track(File file) {
-        read metadata and populate fields
+        this.title = file.getName();
     }
-    */
 
     public String getTitle() {
         return this.title;
