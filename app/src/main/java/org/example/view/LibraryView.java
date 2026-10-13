@@ -55,15 +55,19 @@ public class LibraryView extends JPanel {
         this.folderBar.setLayout(
             new BoxLayout(this.folderBar, BoxLayout.X_AXIS)
         );
+
         this.folderBar.setBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY)
+            BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY),
+                new EmptyBorder(new Insets(6, 0, 6, 0))
+            )
         );
 
         this.headerBar = new JPanel();
         this.headerBar.setLayout(
             new BoxLayout(this.headerBar, BoxLayout.X_AXIS)
         );
-        this.headerBar.setMaximumSize(new Dimension(9999, 58));
+        this.headerBar.setBorder(new EmptyBorder(new Insets(6, 0, 1, 0)));
 
         this.pathLabel = new JLabel("Library: no folder loaded");
         this.folderBar.add(this.pathLabel);
@@ -73,7 +77,7 @@ public class LibraryView extends JPanel {
         this.folderChooserButton = stylizedButton("");
         this.folderBar.add(this.folderChooserButton);
 
-        this.headerBar.add(Box.createRigidArea(new Dimension(6, 0)));
+        this.headerBar.add(Box.createRigidArea(new Dimension(8, 0)));
 
         this.headerBar.add(new JLabel(resizeString("#", 4)));
         this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
@@ -91,6 +95,7 @@ public class LibraryView extends JPanel {
         this.headerBar.add(Box.createRigidArea(new Dimension(15, 0)));
 
         this.headerBar.add(new JLabel(resizeString("Duration", 8)));
+        this.headerBar.add(Box.createHorizontalGlue());
 
         this.folderChooser = new JFileChooser(
             FileSystemView.getFileSystemView().getHomeDirectory()
@@ -138,7 +143,6 @@ public class LibraryView extends JPanel {
             this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         }
 
-        @Override
         public Component getListCellRendererComponent(
             JList<? extends Track> list,
             Track value,
@@ -182,6 +186,8 @@ public class LibraryView extends JPanel {
                     )
                 )
             );
+
+            this.trackCell.add(Box.createHorizontalGlue());
 
             return this.trackCell;
         }
