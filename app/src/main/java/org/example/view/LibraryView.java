@@ -154,6 +154,7 @@ public class LibraryView extends JPanel {
             this.trackCell.setLayout(
                 new BoxLayout(this.trackCell, BoxLayout.X_AXIS)
             );
+            this.trackCell.setBorder(new EmptyBorder(new Insets(3, 0, 3, 0)));
 
             this.trackCell.add(Box.createRigidArea(new Dimension(4, 0)));
 
@@ -188,6 +189,10 @@ public class LibraryView extends JPanel {
             );
 
             this.trackCell.add(Box.createHorizontalGlue());
+
+            if (isSelected) {
+                this.trackCell.setBackground(Color.LIGHT_GRAY);
+            }
 
             return this.trackCell;
         }
