@@ -21,19 +21,6 @@ public class PlayerView extends JPanel {
     JButton prependPlaylistButton;
     JButton appendPlaylistButton;
 
-    JButton stylizedButton(String buttonText) {
-        JButton button = new JButton(buttonText);
-        Dimension size = new Dimension(44, 44);
-
-        button.setMaximumSize(size);
-        button.setPreferredSize(size);
-        button.setFocusPainted(false);
-
-        button.setFont(UIManager.getFont("defaultFont").deriveFont(21.5f));
-
-        return button;
-    }
-
     public PlayerView() {
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBorder(
@@ -57,14 +44,12 @@ public class PlayerView extends JPanel {
 
         this.loopButton = stylizedButton("󰑖");
         this.add(this.loopButton);
-
         this.add(Box.createRigidArea(new Dimension(25, 0)));
 
         this.progressBar = new JProgressBar();
         this.progressBar.setString("00:00/00:00");
         this.progressBar.setStringPainted(true);
         this.add(this.progressBar);
-
         this.add(Box.createHorizontalGlue());
 
         this.prependPlaylistButton = stylizedButton("󰑃");
@@ -107,21 +92,50 @@ public class PlayerView extends JPanel {
         );
     }
 
-    public void changePlayPauseButtonText(String text) {
-        this.playPauseButton.setText(text);
+    public void changeButtonText(String buttonId, String text) {
+        switch (buttonId) {
+            case "playPauseButton":
+                this.playPauseButton.setText(text);
+                break;
+            case "loopButton":
+                this.loopButton.setText(text);
+                break;
+        }
     }
 
-    public void addPlayPauseButtonListener(
-        ActionListener playPauseButtonListener
-    ) {
-        this.playPauseButton.addActionListener(playPauseButtonListener);
+    public void addButtonListener(String buttonId, ActionListener listener) {
+        switch (buttonId) {
+            case "previousButton":
+                this.previousButton.addActionListener(listener);
+                break;
+            case "playPauseButton":
+                this.playPauseButton.addActionListener(listener);
+                break;
+            case "nextButton":
+                this.nextButton.addActionListener(listener);
+                break;
+            case "loopButton":
+                this.loopButton.addActionListener(listener);
+                break;
+            case "appendPlaylistButton":
+                this.appendPlaylistButton.addActionListener(listener);
+                break;
+            case "prependPlaylistButton":
+                this.prependPlaylistButton.addActionListener(listener);
+                break;
+        }
     }
 
-    public void changeLoopButtonText(String text) {
-        this.loopButton.setText(text);
-    }
+    private static JButton stylizedButton(String buttonText) {
+        JButton button = new JButton(buttonText);
+        Dimension size = new Dimension(44, 44);
 
-    public void addLoopButtonListener(ActionListener loopButtonListener) {
-        this.loopButton.addActionListener(loopButtonListener);
+        button.setMaximumSize(size);
+        button.setPreferredSize(size);
+        button.setFocusPainted(false);
+
+        button.setFont(UIManager.getFont("defaultFont").deriveFont(21.5f));
+
+        return button;
     }
 }

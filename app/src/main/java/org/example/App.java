@@ -58,8 +58,10 @@ public class App {
         App app = new App();
 
         LibraryController libraryController = new LibraryController();
-        // PlaylistController playlistController = new PlaylistController();
-        PlayerController playerController = new PlayerController();
+        PlayerController playerController = new PlayerController(
+            libraryController
+        );
+        // PlaylistController playlistController = new PlaylistController(libraryController);
 
         JTabbedPane mainTabs = new JTabbedPane();
         mainTabs.setFont(

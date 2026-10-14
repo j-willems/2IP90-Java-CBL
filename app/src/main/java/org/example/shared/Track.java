@@ -47,23 +47,6 @@ public class Track implements Comparator<Track> {
         }
     }
 
-    private static String getFileExtension(String filename) {
-        int dotIndex = filename.lastIndexOf(".");
-
-        if (dotIndex >= 0) {
-            return filename.substring(dotIndex + 1);
-        }
-
-        return "";
-    }
-
-    public static boolean isSupportedFileType(File file) {
-        String[] supportedFiles = { "mp3", "flac", "ogg", "aiff", "wav" };
-        String extension = getFileExtension(file.getName());
-
-        return Arrays.asList(supportedFiles).contains(extension);
-    }
-
     public String getTitle() {
         return this.title;
     }
@@ -81,7 +64,29 @@ public class Track implements Comparator<Track> {
     }
 
     public String toString() {
-        return String.format("%s - %s:%s", this.artist, this.title, this.album);
+        return String.format(
+            "song [%s] by [%s] on album [%s]",
+            this.title,
+            this.artist,
+            this.album
+        );
+    }
+
+    private static String getFileExtension(String filename) {
+        int dotIndex = filename.lastIndexOf(".");
+
+        if (dotIndex >= 0) {
+            return filename.substring(dotIndex + 1);
+        }
+
+        return "";
+    }
+
+    public static boolean isSupportedFileType(File file) {
+        String[] supportedFiles = { "mp3", "flac", "ogg", "aiff", "wav" };
+        String extension = getFileExtension(file.getName());
+
+        return Arrays.asList(supportedFiles).contains(extension);
     }
 
     public int compare(Track t1, Track t2) {

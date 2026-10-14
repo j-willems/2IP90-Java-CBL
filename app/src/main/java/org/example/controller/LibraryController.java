@@ -2,8 +2,10 @@ package org.example.controller;
 
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import org.example.model.Library;
 import org.example.shared.Playlist;
+import org.example.shared.Track;
 import org.example.view.LibraryView;
 
 public class LibraryController {
@@ -23,6 +25,10 @@ public class LibraryController {
 
     public LibraryView getView() {
         return this.view;
+    }
+
+    public List<Track> getSelectedTracks() {
+        return this.view.getSelectedTracks();
     }
 
     class FolderChooserButtonListener implements ActionListener {

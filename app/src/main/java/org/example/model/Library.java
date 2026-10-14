@@ -16,6 +16,19 @@ public class Library extends AbstractListModel<Track> {
         this.libraryDir = null;
     }
 
+    public int getSize() {
+        return this.playlist.getSize();
+    }
+
+    public Track getElementAt(int index) {
+        return this.playlist.getTrackAtIndex(index);
+    }
+
+    public void clear() {
+        fireIntervalRemoved(this, 0, this.playlist.getSize());
+        this.playlist.clear();
+    }
+
     public boolean setPath(String path) {
         try {
             this.libraryDir = new File(path);
@@ -30,7 +43,13 @@ public class Library extends AbstractListModel<Track> {
         return true;
     }
 
-    private void recurseLibrary(File[] files) {
+    public void populateLibrary() {
+        File[] files = this.libraryDir.listFiles();
+        recurseDirectory(files);
+        fireIntervalAdded(this, 0, this.playlist.getSize());
+    }
+
+    private void recurseDirectory(File[] files) {
         Arrays.sort(files);
 
         for (File file : files) {
@@ -39,27 +58,8 @@ public class Library extends AbstractListModel<Track> {
                     this.playlist.appendTrack(new Track(file));
                 }
             } else if (file.isDirectory()) {
-                recurseLibrary(file.listFiles());
+                recurseDirectory(file.listFiles());
             }
         }
-    }
-
-    public void populateLibrary() {
-        File[] files = this.libraryDir.listFiles();
-        recurseLibrary(files);
-        fireIntervalAdded(this, 0, this.playlist.getSize());
-    }
-
-    public Track getElementAt(int index) {
-        return this.playlist.getTrackAtIndex(index);
-    }
-
-    public int getSize() {
-        return this.playlist.getSize();
-    }
-
-    public void clear() {
-        fireIntervalRemoved(this, 0, this.playlist.getSize());
-        this.playlist.clear();
     }
 }

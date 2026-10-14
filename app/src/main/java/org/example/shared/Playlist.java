@@ -14,31 +14,15 @@ public class Playlist {
         this.size = 0;
     }
 
-    public Track firstTrack() {
-        if (this.head == null) {
-            return null;
-        }
-
-        return this.head.track;
-    }
-
-    public Track nextTrack() {
-        this.current = this.current.next;
-
-        return this.current.track;
-    }
-
     public int getSize() {
         return this.size;
     }
 
-    public void clear() {
-        this.current = null;
-        this.head = null;
-        this.size = 0;
-    }
-
     public Track getTrackAtIndex(int index) {
+        if (this.head == null) {
+            return null;
+        }
+
         Node temp = this.head;
 
         for (int i = 0; i < index; i++) {
@@ -48,27 +32,25 @@ public class Playlist {
         return temp.track;
     }
 
-    public Track previousTrack() {
-        this.current = this.current.prev;
-
-        return this.current.track;
+    public void clear() {
+        this.current = null;
+        this.head = null;
+        this.size = 0;
     }
 
-    public int appendTrack(Track track) {
+    public void appendTrack(Track track) {
         this.size++;
 
         if (this.head == null) {
             this.head = new Node(track);
 
-            return 0;
+            return;
         }
 
         Node temp = new Node(track, this.head.prev, this.head);
 
         this.head.prev.next = temp;
         this.head.prev = temp;
-
-        return this.size - 1;
     }
 
     public void prependTrack(Track track) {
@@ -79,6 +61,10 @@ public class Playlist {
     public boolean insertTrack(Track track, int position) {
         if ((position < 0) | (position > this.size)) {
             return false;
+        }
+
+        if (this.head == null) {
+            this.head = new Node(track);
         }
 
         Node temp = this.head;
@@ -95,7 +81,7 @@ public class Playlist {
     }
 
     public boolean deleteTrack(int position) {
-        if ((position < 0) | (position > this.size)) {
+        if ((position < 0) | (position > this.size) | (this.head == null)) {
             return false;
         }
 
@@ -109,6 +95,26 @@ public class Playlist {
 
         this.size--;
         return true;
+    }
+
+    public Track previousTrack() {
+        if (this.head == null) {
+            return null;
+        }
+
+        this.current = this.current.prev;
+
+        return this.current.track;
+    }
+
+    public Track nextTrack() {
+        if (this.head == null) {
+            return null;
+        }
+
+        this.current = this.current.next;
+
+        return this.current.track;
     }
 
     public void traverse() {
@@ -125,23 +131,23 @@ public class Playlist {
             temp = temp.next;
         }
     }
-}
 
-class Node {
+    class Node {
 
-    Track track;
-    Node prev;
-    Node next;
+        Track track;
+        Node prev;
+        Node next;
 
-    Node(Track track) {
-        this.track = track;
-        this.prev = this;
-        this.next = this;
-    }
+        Node(Track track) {
+            this.track = track;
+            this.prev = this;
+            this.next = this;
+        }
 
-    Node(Track track, Node prev, Node next) {
-        this.track = track;
-        this.prev = prev;
-        this.next = next;
+        Node(Track track, Node prev, Node next) {
+            this.track = track;
+            this.prev = prev;
+            this.next = next;
+        }
     }
 }
