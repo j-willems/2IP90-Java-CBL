@@ -35,7 +35,9 @@ public class Library extends AbstractListModel<Track> {
 
         for (File file : files) {
             if (file.isFile()) {
-                this.playlist.appendTrack(new Track(file));
+                if (Track.isSupportedFileType(file)) {
+                    this.playlist.appendTrack(new Track(file));
+                }
             } else if (file.isDirectory()) {
                 recurseLibrary(file.listFiles());
             }

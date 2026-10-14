@@ -1,9 +1,12 @@
 package org.example.shared;
 
-import java.io.File;
-import java.time.Duration;
-import java.util.Comparator;
-import javax.swing.ImageIcon;
+import java.io.*;
+import java.time.*;
+import java.util.*;
+import javax.swing.*;
+import org.jaudiotagger.audio.*;
+import org.jaudiotagger.audio.exceptions.*;
+import org.jaudiotagger.tag.*;
 
 public class Track implements Comparator<Track> {
 
@@ -15,10 +18,50 @@ public class Track implements Comparator<Track> {
     ImageIcon cover;
 
     public Track(File file) {
-        this.title = file.getName();
-        this.artist = file.getName();
-        this.album = file.getName();
-        this.duration = Duration.ZERO;
+        try {
+            AudioFile audioFile = AudioFileIO.read(file);
+
+            Tag tag = audioFile.getTag();
+
+            this.artist = "";
+            this.title = tag.getFirst(FieldKey.TITLE);
+            this.album = tag.getFirst(FieldKey.ALBUM);
+            this.duration = Duration.ofSeconds(
+                audioFile.getAudioHeader().getTrackLength()
+            );
+
+            List<TagField> artists = tag.getFields(FieldKey.ARTIST);
+            for (TagField artist : artists) {
+                this.artist += artist.toString();
+            }
+
+            // TagField coverArt = tag.getFirstField(FieldKey.COVER_ART);
+        } catch (
+            CannotReadException
+            | IOException
+            | TagException
+            | ReadOnlyFileException
+            | InvalidAudioFrameException e
+        ) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getFileExtension(String filename) {
+        int dotIndex = filename.lastIndexOf(".");
+
+        if (dotIndex >= 0) {
+            return filename.substring(dotIndex + 1);
+        }
+
+        return "";
+    }
+
+    public static boolean isSupportedFileType(File file) {
+        String[] supportedFiles = { "mp3", "flac", "ogg", "aiff", "wav" };
+        String extension = getFileExtension(file.getName());
+
+        return Arrays.asList(supportedFiles).contains(extension);
     }
 
     public String getTitle() {
