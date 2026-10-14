@@ -55,6 +55,8 @@ public class Playlist {
     }
 
     public int appendTrack(Track track) {
+        this.size++;
+
         if (this.head == null) {
             this.head = new Node(track);
 
@@ -66,7 +68,6 @@ public class Playlist {
         this.head.prev.next = temp;
         this.head.prev = temp;
 
-        this.size++;
         return this.size - 1;
     }
 
