@@ -79,6 +79,7 @@ public class LibraryView extends JPanel {
 
         this.tracksList = new JList<Track>();
         this.tracksList.setCellRenderer(new TrackRenderer());
+        this.tracksList.setFocusable(false);
 
         this.scrollPane = new JScrollPane(
             this.tracksList,

@@ -132,6 +132,19 @@ public class Playlist {
         }
     }
 
+    public String getStringRepresentation() {
+        StringBuilder output = new StringBuilder();
+
+        Node temp = this.head;
+        for (int i = 0; i < this.size; i++) {
+            output.append(temp.track.getPath() + "\n");
+
+            temp = temp.next;
+        }
+
+        return output.toString();
+    }
+
     private static Node split(Node head) {
         Node slow = head;
         Node fast = head;

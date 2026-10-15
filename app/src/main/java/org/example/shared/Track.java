@@ -10,6 +10,7 @@ import org.jaudiotagger.tag.*;
 
 public class Track {
 
+    File source;
     String title;
     String artist;
     String album;
@@ -19,8 +20,9 @@ public class Track {
 
     public Track(File file) {
         try {
-            AudioFile audioFile = AudioFileIO.read(file);
+            this.source = file;
 
+            AudioFile audioFile = AudioFileIO.read(file);
             Tag tag = audioFile.getTag();
 
             this.artist = "";
@@ -45,6 +47,10 @@ public class Track {
         ) {
             e.printStackTrace();
         }
+    }
+
+    public String getPath() {
+        return this.source.getAbsolutePath();
     }
 
     public String getTitle() {

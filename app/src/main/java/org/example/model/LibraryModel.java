@@ -6,12 +6,12 @@ import javax.swing.*;
 import org.example.shared.Playlist;
 import org.example.shared.Track;
 
-public class Library extends AbstractListModel<Track> {
+public class LibraryModel extends AbstractListModel<Track> {
 
     Playlist playlist;
     File libraryDir;
 
-    public Library() {
+    public LibraryModel() {
         this.playlist = new Playlist();
         this.libraryDir = null;
     }

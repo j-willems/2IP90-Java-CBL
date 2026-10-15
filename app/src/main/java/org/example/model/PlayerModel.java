@@ -3,14 +3,14 @@ package org.example.model;
 import org.example.shared.Playlist;
 import org.example.shared.Track;
 
-public class MediaPlayer {
+public class PlayerModel {
 
     Playlist playlist;
     Track currentTrack;
     boolean isPlaying;
     boolean isLooping;
 
-    public MediaPlayer() {
+    public PlayerModel() {
         this.playlist = new Playlist();
         this.currentTrack = this.playlist.getTrackAtIndex(0);
         this.isPlaying = false;

@@ -2,24 +2,27 @@ package org.example.controller;
 
 import java.awt.event.*;
 import org.example.controller.LibraryController;
-//import org.example.controller.PlaylistController;
-import org.example.model.MediaPlayer;
+import org.example.controller.PlaylistController;
+import org.example.model.PlayerModel;
+import org.example.shared.Playlist;
 import org.example.shared.Track;
 import org.example.view.PlayerView;
 
 public class PlayerController {
 
-    MediaPlayer model;
+    PlayerModel model;
     PlayerView view;
     LibraryController libraryController;
+    PlaylistController playlistController;
 
-    // PlaylistController playlistController;
-
-    public PlayerController(LibraryController libraryController) {
-        this.model = new MediaPlayer();
+    public PlayerController(
+        LibraryController libraryController,
+        PlaylistController playlistController
+    ) {
+        this.model = new PlayerModel();
         this.view = new PlayerView();
         this.libraryController = libraryController;
-        // this.playlistController = playlistController;
+        this.playlistController = playlistController;
 
         this.view.addButtonListener(
             "previousButton",
@@ -36,11 +39,15 @@ public class PlayerController {
         this.view.addButtonListener("loopButton", new LoopButtonListener());
         this.view.addButtonListener(
             "prependPlaylistButton",
-            new AddPlaylistButtonListener(false)
+            new AddPlaylistButtonListener("prepend")
+        );
+        this.view.addButtonListener(
+            "insertPlaylistButton",
+            new AddPlaylistButtonListener("insert")
         );
         this.view.addButtonListener(
             "appendPlaylistButton",
-            new AddPlaylistButtonListener(true)
+            new AddPlaylistButtonListener("append")
         );
     }
 
@@ -95,23 +102,29 @@ public class PlayerController {
 
     class AddPlaylistButtonListener implements ActionListener {
 
-        boolean isAppendButton;
+        String buttonId;
 
-        public AddPlaylistButtonListener(boolean isAppendButton) {
-            this.isAppendButton = isAppendButton;
+        public AddPlaylistButtonListener(String buttonId) {
+            this.buttonId = buttonId;
         }
 
         public void actionPerformed(ActionEvent arg0) {
-            if (this.isAppendButton) {
-                // append
-                for (Track track : libraryController.getSelectedTracks()) {
-                    System.out.println(track);
-                }
-            } else {
-                // prepend
-                for (Track track : libraryController.getSelectedTracks()) {
-                    System.out.println(track);
-                }
+            switch (this.buttonId) {
+                case "append":
+                    playlistController.appendTracks(
+                        libraryController.getSelectedTracks()
+                    );
+                    break;
+                case "insert":
+                    playlistController.insertTracks(
+                        libraryController.getSelectedTracks(),
+                        view.askForInsertionIndex()
+                    );
+                    break;
+                case "prepend":
+                    playlistController.prependTracks(
+                        libraryController.getSelectedTracks()
+                    );
             }
         }
     }

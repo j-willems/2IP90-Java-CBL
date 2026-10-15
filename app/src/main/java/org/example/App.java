@@ -7,9 +7,7 @@ import java.net.*;
 import javax.swing.*;
 import org.example.controller.LibraryController;
 import org.example.controller.PlayerController;
-import org.example.model.Library;
-import org.example.shared.Playlist;
-import org.example.shared.Track;
+import org.example.controller.PlaylistController;
 
 public class App {
 
@@ -55,24 +53,27 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App();
+        SwingUtilities.invokeLater(() -> {
+            App app = new App();
 
-        LibraryController libraryController = new LibraryController();
-        PlayerController playerController = new PlayerController(
-            libraryController
-        );
-        // PlaylistController playlistController = new PlaylistController(libraryController);
+            LibraryController libraryController = new LibraryController();
+            PlaylistController playlistController = new PlaylistController();
+            PlayerController playerController = new PlayerController(
+                libraryController,
+                playlistController
+            );
 
-        JTabbedPane mainTabs = new JTabbedPane();
-        mainTabs.setFont(
-            UIManager.getFont("defaultFont").deriveFont(Font.BOLD)
-        );
-        mainTabs.addTab("Library", libraryController.getView());
-        // maintabs.addTab("Playlist", PlayListController.getView());
+            JTabbedPane mainTabs = new JTabbedPane();
+            mainTabs.setFont(
+                UIManager.getFont("defaultFont").deriveFont(Font.BOLD)
+            );
+            mainTabs.addTab("Library", libraryController.getView());
+            mainTabs.addTab("Playlist", playlistController.getView());
 
-        frame.add(mainTabs, BorderLayout.CENTER);
-        frame.add(playerController.getView(), BorderLayout.SOUTH);
+            frame.add(mainTabs, BorderLayout.CENTER);
+            frame.add(playerController.getView(), BorderLayout.SOUTH);
 
-        app.displayFrame();
+            app.displayFrame();
+        });
     }
 }

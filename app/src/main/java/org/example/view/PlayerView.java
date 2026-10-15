@@ -19,6 +19,7 @@ public class PlayerView extends JPanel {
     JProgressBar progressBar;
 
     JButton prependPlaylistButton;
+    JButton insertPlaylistButton;
     JButton appendPlaylistButton;
 
     public PlayerView() {
@@ -54,6 +55,10 @@ public class PlayerView extends JPanel {
 
         this.prependPlaylistButton = stylizedButton("󰑃");
         this.add(this.prependPlaylistButton);
+        this.add(Box.createRigidArea(new Dimension(5, 0)));
+
+        this.insertPlaylistButton = stylizedButton("");
+        this.add(this.insertPlaylistButton);
         this.add(Box.createRigidArea(new Dimension(5, 0)));
 
         this.appendPlaylistButton = stylizedButton("󰑁");
@@ -120,10 +125,36 @@ public class PlayerView extends JPanel {
             case "appendPlaylistButton":
                 this.appendPlaylistButton.addActionListener(listener);
                 break;
+            case "insertPlaylistButton":
+                this.insertPlaylistButton.addActionListener(listener);
+                break;
             case "prependPlaylistButton":
                 this.prependPlaylistButton.addActionListener(listener);
                 break;
         }
+    }
+
+    public int askForInsertionIndex() {
+        String input = (String) JOptionPane.showInputDialog(
+            this,
+            "Enter the index at which you'd like\nthe selected tracks to be inserted",
+            "Enter insertion index",
+            JOptionPane.PLAIN_MESSAGE
+        );
+
+        if (input != null && input.length() > 0) {
+            try {
+                int output = Integer.parseInt(input);
+
+                if (output >= 0) {
+                    return output;
+                }
+            } catch (NumberFormatException e) {
+                return 0;
+            }
+        }
+
+        return 0;
     }
 
     private static JButton stylizedButton(String buttonText) {

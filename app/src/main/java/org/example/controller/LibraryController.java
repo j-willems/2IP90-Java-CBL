@@ -3,18 +3,18 @@ package org.example.controller;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
-import org.example.model.Library;
+import org.example.model.LibraryModel;
 import org.example.shared.Playlist;
 import org.example.shared.Track;
 import org.example.view.LibraryView;
 
 public class LibraryController {
 
-    Library model;
+    LibraryModel model;
     LibraryView view;
 
     public LibraryController() {
-        this.model = new Library();
+        this.model = new LibraryModel();
         this.view = new LibraryView();
         this.view.setLibraryContent(this.model);
 
