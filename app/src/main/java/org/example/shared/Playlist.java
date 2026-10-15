@@ -119,7 +119,7 @@ public class Playlist {
 
     public void traverse() {
         Node temp = this.head;
-        for (int i = 0; i <= this.size; i++) {
+        for (int i = 0; i < this.size; i++) {
             System.out.println(
                 temp.track +
                     ", prev: " +
@@ -130,6 +130,94 @@ public class Playlist {
 
             temp = temp.next;
         }
+    }
+
+    private static Node split(Node head) {
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+
+        Node temp = slow.next;
+        slow.next = null;
+
+        if (temp != null) {
+            temp.prev = null;
+        }
+
+        return temp;
+    }
+
+    private static Node merge(
+        Node first,
+        Node second,
+        String operand,
+        boolean increasing
+    ) {
+        if (first == null) {
+            return second;
+        } else if (second == null) {
+            return first;
+        }
+
+        boolean comparator =
+            first.track.compare(second.track, operand) * (increasing ? 1 : -1) <
+            0;
+
+        if (comparator) {
+            first.next = merge(first.next, second, operand, increasing);
+
+            if (first.next != null) {
+                first.next.prev = first;
+            }
+
+            first.prev = null;
+            return first;
+        } else {
+            second.next = merge(first, second.next, operand, increasing);
+
+            if (second.next != null) {
+                second.next.prev = second;
+            }
+
+            second.prev = null;
+            return second;
+        }
+    }
+
+    public static Node mergeSort(
+        Node head,
+        String operand,
+        boolean increasing
+    ) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+
+        Node second = split(head);
+
+        head = mergeSort(head, operand, increasing);
+        second = mergeSort(second, operand, increasing);
+
+        return merge(head, second, operand, increasing);
+    }
+
+    public void sort(String operand, boolean increasing) {
+        this.head.prev.next = null;
+        this.head.prev = null;
+
+        this.head = mergeSort(head, operand, increasing);
+
+        Node temp = this.head;
+        while (temp.next != null) {
+            temp = temp.next;
+        }
+
+        temp.next = this.head;
+        this.head.prev = temp;
     }
 
     class Node {

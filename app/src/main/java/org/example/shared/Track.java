@@ -8,7 +8,7 @@ import org.jaudiotagger.audio.*;
 import org.jaudiotagger.audio.exceptions.*;
 import org.jaudiotagger.tag.*;
 
-public class Track implements Comparator<Track> {
+public class Track {
 
     String title;
     String artist;
@@ -89,9 +89,16 @@ public class Track implements Comparator<Track> {
         return Arrays.asList(supportedFiles).contains(extension);
     }
 
-    public int compare(Track t1, Track t2) {
-        int titleCompare = t1.title.compareTo(t2.title);
-
-        return titleCompare;
+    public int compare(Track other, String operand) {
+        switch (operand) {
+            default:
+                return this.title.compareTo(other.title);
+            case "artist":
+                return this.artist.compareTo(other.artist);
+            case "album":
+                return this.album.compareTo(other.album);
+            case "duration":
+                return this.duration.compareTo(other.duration);
+        }
     }
 }
